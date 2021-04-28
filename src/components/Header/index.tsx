@@ -1,18 +1,24 @@
-import { SignInButton } from '../SignInButton';
-import styles from './styles.module.scss';
+import { SignInButton } from "../SignInButton";
+import Link from 'next/link';
+import styles from "./styles.module.scss";
 
-export function Header (){
-    return (
-        <header className={styles.headerContainer}>
-            <div className={styles.headerContent}>
-                <img src="/images/logo.svg" alt="code.news"/>
-                <nav>
-                    <a className={styles.active}>Home</a>
-                    <a>Posts</a>
-                </nav>
+export function Header() {
+  return (
+    <header className={styles.headerContainer}>
+      <div className={styles.headerContent}>
+        <img src="/images/logo.svg" alt="code.news" />
+        <nav>
+          <Link href='/'> 
+           <a className={styles.active}>Home</a>
+          </Link>
+          <Link href='/posts'>
+           <a>Posts</a>
+          </Link>
 
-                <SignInButton />
-            </div>
-        </header>
-    );
+        </nav>
+
+        <SignInButton />
+      </div>
+    </header>
+  );
 }
