@@ -9,18 +9,18 @@ import { getPrismicClient } from '../../services/prismic';
 import styles from './styles.module.scss';
 
 
-type Post = {
+type Publication = {
   slug: string;
   title: string;
   excerpt: string;
   updatedAt: string;
 }
 
-interface PostsProps {
-  posts: Post[]
+interface PublicationsProps {
+  posts: Publication[]
 }
 
-export default function Posts({ posts }: PostsProps) {
+export default function Posts({ posts }: PublicationsProps) {
   return (
     <> 
       <Head>
@@ -29,12 +29,12 @@ export default function Posts({ posts }: PostsProps) {
 
       <main className={styles.container}>
         <div className={styles.posts}>
-          { posts.map(post => (
-            <Link href={`/posts/${post.slug}`}>
-              <a key={post.slug}>
-                <time>{post.updatedAt}</time>
-                <strong>{post.title}</strong>
-                <p>{post.excerpt}</p>
+          { posts.map(publication => (
+            <Link href={`/posts/${publication.slug}`}>
+              <a key={publication.slug}>
+                <time>{publication.updatedAt}</time>
+                <strong>{publication.title}</strong>
+                <p>{publication.excerpt}</p>
               </a>
             </Link>
           ))}
@@ -48,18 +48,18 @@ export const getStaticProps : GetStaticProps = async () => {
   const prismic = getPrismicClient()
 
   const response = await prismic.query([
-    Prismic.predicates.at('document.type', 'posts')
+    Prismic.predicates.at('document.type', 'publication')
   ] , {
-    fetch: ['posts.title', 'posts.content'],
+    fetch: ['publication.title', 'publication.content'],
     pageSize: 100,
   })
 
-  const posts = response.results.map(post => {
+  const posts = response.results.map(publication => {
     return {
-      slug: post.uid,
-      title: RichText.asText(post.data.title),
-      excerpt: post.data.content.find(content => content.type === 'paragraph')?.text ?? '',
-      updatedAt: new Date(post.last_publication_date).toLocaleDateString('pt-BR', {
+      slug: publication.uid,
+      title: RichText.asText(publication.data.title),
+      excerpt: publication.data.content.find(content => content.type === 'paragraph')?.text ?? '',
+      updatedAt: new Date(publication.last_publication_date).toLocaleDateString('pt-BR', {
         day: '2-digit',
         month: 'long',
         year: 'numeric'
